@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页</title>
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/table/bootstrap-table.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- 导航 -->
+<nav class="navbar navbar-default" role="navigation" style="padding-bottom: 0">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">后台信息管理</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="navbar-brand">当前登录用户：<span th:text="${session.user.name}"></span></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">操作<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a th:href="@{/to_page/to_add}">新增</a></li>
+                    <li><a th:href="@{/user/logout}">退出</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="padding-top: 0;">
+    <div class="panel-body">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <label>电影名:</label>
+                <input type="text" class="form-control"
+                       id="tjName"
+                       placeholder="电影名">
+            </div>
+
+            <div class="form-group">
+                <label>主演</label>
+                <input type="text" class="form-control"
+                       id="tjActor"
+                       placeholder="主演">
+            </div>
+
+            <div class="form-group">
+                <label>类型</label>
+                <select name="type" id="tjType" class="form-control">
+                    <option value="">===请选择类型===</option>
+                    <option value="剧情">剧情</option>
+                    <option value="动作">动作</option>
+                    <option value="悬疑">悬疑</option>
+                    <option value="犯罪">犯罪</option>
+                    <option value="动画">动画</option>
+                    <option value="奇幻">奇幻</option>
+                    <option value="惊悚">惊悚</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>上映日期:</label>
+                <input type="date" class="form-control"
+                       id="tjOntimeStart" name="ontime1">
+                ——
+                <input type="date" class="form-control"
+                       id="tjOntimeEnd" name="ontime2">
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="queryByTj()">查询</button>
+        </form>
+    </div>
+</div>
+</div>
+
+<div style="height: 300px">
+    <table id="tb" class="table table-bordered table-striped table-hover ">
+    </table>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <!-- 1. 获得参数  2.根据主键查询 3.ma.setName()  4.update  -->
+                <form  th:action="@{/movie/update}" enctype="multipart/form-data"
+                       method="post"
+                       class="form-horizontal"
+                       role="form" >
+                    <div style="width: 550px;padding-left: 10px">
+                        <input type="hidden" id="hidden" name="movieId">
+                        <input type="hidden" id="hiddenpic" name="hiddenpic">
+                        <input type="hidden" id="hid" name="movieOperation">
+
+                        <div class="form-group">
+                            <label for="movieName">电影名</label>
+                            <input type="text" class="form-control" name="movieName" id="movieName" placeholder="电影名">
+                        </div>
+                        <div class="form-group">
+                            <label for="director">导演</label>
+                            <input type="text" class="form-control" name="movieDirector" id="director" placeholder="导演">
+                        </div>
+                        <div class="form-group">
+                            <label>类型</label>
+                            <input type="checkbox" name="type" value="剧情">剧情
+                            <input type="checkbox" name="type" value="动作">动作
+                            <input type="checkbox" name="type" value="悬疑">悬疑
+                            <input type="checkbox" name="type" value="犯罪">犯罪
+                            <input type="checkbox" name="type" value="动画">动画
+                            <input type="checkbox" name="type" value="奇幻">奇幻
+                            <input type="checkbox" name="type" value="惊悚">惊悚
+                        </div>
+                        <div class="form-group">
+                            <label for="actor">主演</label>
+                            <input type="text" class="form-control" name="movieActor" id="actor" placeholder="主演">
+                        </div>
+                        <div class="form-group">
+                            <label>国家/地区</label>
+                            <input type="text" class="form-control" name="movieArea" id="area" placeholder="地区">
+                        </div>
+                        <div class="form-group">
+                            <label>语言</label>
+                            <input type="text" id="movieLanguage" class="form-control" name="movieLanguage" placeholder="语言">
+                        </div>
+                        <div class="form-group">
+                            <label>上映时间</label>
+                            <input type="date" id="movieOntime" class="form-control" name="movieOntime">
+                        </div>
+                        <div class="form-group" id="picdiv">
+                        </div>
+                        <div class="form-group">
+                            <label for="pic">电影图片</label>
+                            <input type="file" id="pic" name="pic">
+                        </div>
+                        <button type="submit" class="btn btn-warning">更新</button>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--<button type="button" onclick="subform()" class="btn btn-primary"></button>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script th:src="@{/js/jquery/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/bootstrap/table/bootstrap-table.min.js}"></script>
+<script th:src="@{/bootstrap/table/bootstrap-table-zh-CN.min.js}"></script>
+<script>
+    //const path = [[${#request.getContextPath()}]];
+
+    $(function () {
+        querydata();
+    });
+
+    function querydata() {
+        $("#tb").bootstrapTable({
+                url: "/eve/movie/list",  //获取数据的地址
+                pagination: true,   //是否分页 默认 不分
+                pageSize: 3,         //每页显示记录
+                pageNumber: 1,       // 从第几页开始查询
+                pageList: [3, 4, 5],   //切换 pageSize
+                //默认 client: 分页 客户端分页【假分页】 按需显示
+                //   server:服务器端分页【真分页】 按需提取
+                sidePagination: "server",
+                //默认 limit: 分页参数 limit[pageSize]+offset[start]
+                // undefined: pageNumber +pageSize
+                queryParamsType: "undefined",
+                queryParams: function (params) {
+                    let tjName = $("#tjName").val();
+                    let tjActor = $("#tjActor").val();
+                    let tjType = $("#tjType").val();
+                    let tjOntimeStart = $("#tjOntimeStart").val();
+                    let tjOntimeEnd = $("#tjOntimeEnd").val();
+                    let newParams = {
+                        pageNumber: params.pageNumber,
+                        pageSize: params.pageSize,
+                    }
+                    newParams.tjName = tjName;
+                    newParams.tjActor = tjActor;
+                    newParams.tjType = tjType;
+                    newParams.tjOntimeStart = tjOntimeStart;
+                    newParams.tjOntimeEnd = tjOntimeEnd;
+
+                    return newParams;//{limit:xxx,offset:xx}{pageNumber:xx,pageSize:xx}
+                }, //columns: 列信息
+                columns: [
+                    {
+                        field: "moviePic",
+                        title: "电影图片",
+                        formatter: function (value, row, index) {
+                            return "<img src='/eve" + row.moviePic + "' width='150px' height='100px'>";
+                        }
+                    }, {
+                        field: "movieName",
+                        title: "电影名"
+                    }, {
+                        field: "movieDirector",
+                        title: "导演"
+                    }, {
+                        field: "movieActor",
+                        title: "主演"
+                    }, {
+                        field: "movieType",
+                        title: "类型"
+                    }, {
+                        field: "movieArea",
+                        title: "国家/地区"
+                    }, {
+                        field: "movieLanguage",
+                        title: "语言"
+                    }, {
+                        field: "movieOntime",
+                        title: "上映日期"
+                    }, {
+                        //field: "movieOperation",
+                        title: "操作",
+                        formatter: function (value, row, index) {
+                            let info = "<a class='btn btn-primary' id='info'>修改</a>";
+                            let ud = "<a class='btn btn-" + (row.movieOperation == 1 ? "success" : "danger") + "' href='javascript:void(0);' id='ud' >" + (row.movieOperation == 1 ? "下架" : "上架") + "</a>"
+                            return info + " | " + ud;
+                        },
+                        events: etevents
+                    }]
+            }
+        );
+
+    }
+
+    window.etevents={
+        'click #ud':function(event,value,row,index){
+            $.post("/eve/movie/changelevel","movieid="+row.movieId,function(msg){
+                console.log("+++++++++++++++++++");
+                $("#tb").bootstrapTable("refresh")
+            },"text");
+        },
+        'click #info':function(event,value,row,index){
+
+            $("input[name='type']").removeAttr("checked");
+            $("#picdiv").html("");
+            let check = row.movieType;
+            let array = check.split("/");
+            for (let i of array){
+                $("input[name='type'][value='"+i+"']").prop("checked",true);
+            }
+            $("#movieName").val(row.movieName);
+            $("#director").val(row.movieDirector);
+            $("#actor").val(row.movieActor);
+            $("#hidden").val(row.movieId);
+            $("#hiddenpic").val(row.moviePic);
+            $("#hid").val(row.movieOperation);
+
+            //1990-09-09
+            $("#area").val(row.movieArea);
+            $("#movieLanguage").val(row.movieLanguage);
+            $("#movieOntime").val(row.movieOntime);
+            $("#picdiv").html("<img id='img' src='/eve"+ row.moviePic+ "' style='height: 200px;width: 200px'>");
+            $("#myModal").modal("show");
+        }
+
+    }
+
+    function queryByTj() {
+        $("#tb").bootstrapTable("refresh");
+    }
+
+</script>
+</body>
+</html>

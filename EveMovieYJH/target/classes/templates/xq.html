@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>添加</title>
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+
+<input type="hidden" th:value="${session.movie.getMovieName()}" id="hidden1">
+<input type="hidden" th:value="${session.movie.getMovieDirector()}" id="hidden2">
+<input type="hidden" th:value="${session.movie.getMovieActor()}" id="hidden3">
+<input type="hidden" th:value="${session.movie.getMovieType()}" id="hidden4">
+<input type="hidden" th:value="${session.movie.getMovieArea()}" id="hidden5">
+<input type="hidden" th:value="${session.movie.getMovieLanguage()}" id="hidden6">
+<input type="hidden" th:value="${session.movie.getMovieOntime()}" id="hidden7">
+<input type="hidden" th:value="${session.movie.getMoviePic()}" id="hidden8">
+<input type="hidden" th:value="${session.movie.getMovieId()}" id="hidden9">
+<input type="hidden" th:value="${session.user.getName()}" id="hidden10">
+<input type="hidden" th:value="${session.movie.getMovieCreate()}" id="hidden11">
+
+
+<div id="title" style="text-align: center"></div>
+<!-- 菜单 -->
+<form class="form-horizontal"
+      role="form">
+    <div style="width: 1000px;padding-left: 300px;padding-bottom: 200px">
+        <div class="form-group" id="director">
+            <label for="director">导演</label>
+        </div>
+        <div class="form-group" id="actor">
+            <label for="actor">主演</label>
+        </div>
+        <div class="form-group" id="type">
+            <label for="type">类型</label>
+        </div>
+        <div class="form-group" id="area">
+            <label>国家/地区</label>
+        </div>
+        <div class="form-group" id="Language">
+            <label>语言</label>
+        </div>
+        <div class="form-group" id="time">
+            <label>上映时间</label>
+        </div>
+        <div class="form-group" id="pic">
+            <label>图片</label>
+        </div>
+        <br>
+        <input id="btn" type="button" class="btn btn-warning" onclick="chuxian()" style="width: 550px" value="写影评">
+        <div id="writereview" hidden>
+            <label>影评：</label>
+            <textarea class="form-control" rows="5"   maxlength="350" id="textarea"
+                       οnchange="this.value=this.value.substring(0, 350)"
+                       οnkeydοwn="this.value=this.value.substring(0, 350)"
+                       οnkeyup="this.value=this.value.substring(0, 350)"  ></textarea>
+            <button type="button" class="btn btn-success" onclick="tijiao()">提交影评</button>
+        </div>
+        <div id="review">
+        </div>
+    </div>
+</form>
+
+<script th:src="@{/js/jquery/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script>
+    let name = $("#hidden1").val();
+    let h2 = $("#hidden2").val();
+    let h3 = $("#hidden3").val();
+    let h4 = $("#hidden4").val();
+    let h5 = $("#hidden5").val();
+    let h6 = $("#hidden6").val();
+    let h7 = $("#hidden7").val();
+    let h8 = $("#hidden8").val();
+    let h9 = $("#hidden11").val();
+    let username = $("#hidden10").val();
+    let movieId = $("#hidden9").val();
+    let titles = "<h1>" + name + "</h1>" +
+        "<scan>"+h9+"</scan>";
+    $("#title").html(titles);
+    $("#director").append("<h5>" + h2 + "</h5>");
+    $("#actor").append("<h5>" + h3 + "</h5>");
+    $("#type").append("<h5>" + h4 + "</h5>");
+    $("#area").append("<h5>" + h5 + "</h5>");
+    $("#Language").append("<h5>" + h6 + "</h5>");
+    $("#time").append("<h5>" + h7 + "</h5>");
+    $("#pic").append("<br><img src='/eve" + h8 + "' style='width: 600px;height: 300px'>");
+
+
+    $(function () {
+        queryReview(movieId);
+    });
+
+    function chuxian() {
+        if($("#btn").val()==="写影评"){
+            $("#writereview").removeAttr("hidden");
+            $("#btn").val("取消影评");
+            return ;
+        }
+        if($("#btn").val()==="取消影评"){
+            $("#writereview").attr("hidden","true");
+            $("#btn").val("写影评");
+            return ;
+        }
+    }
+
+    function queryReview(id) {
+        let re = "";
+        $.post("/eve/review/queryReview", "mid=" + id, function (data) {
+            $.each(data, function (i, review) {
+                re += "<h4 style='color: deepskyblue'>" + review.username + "<span style='font-size: 10px;padding-left: 5px'>"+ review.reviewCreate +"</span></h4>" +
+                    "<p>" + review.content + "</p><hr>";
+            });
+            $("#review").html(re);
+        }, "json");
+    }
+
+    function tijiao() {
+        let t = $("#textarea").val();
+        $.post("/eve/review/addReview", "movieId=" + movieId+ "&username="+username + "&content="+t, function (data) {
+        console.log("挤进来了");
+            alert("提交成功");
+            queryReview(movieId);
+            $("#textarea").val("");
+        }, "text");
+    }
+
+</script>
+</body>
+</html>

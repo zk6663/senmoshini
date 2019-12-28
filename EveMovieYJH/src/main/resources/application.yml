@@ -1,0 +1,35 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /eve
+
+## 修改Thymeleaf缓存为false
+spring:
+  thymeleaf:
+    cache: false
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/et1906
+    username: root
+    password: etoak
+    hikari:
+      maximum-pool-size: 20
+
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 50MB
+
+# 整合MyBatis
+mybatis:
+  type-aliases-package: com.etoak.bean
+  mapper-locations: classpath:/mappers/*.xml
+
+## PageHelper
+pagehelper:
+  reasonable: true
+
+logging:
+  level:
+    com.etoak.mapper: debug

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>添加</title>
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- 菜单 -->
+<form th:action="@{/movie/add}" enctype="multipart/form-data"
+      method="post"
+      class="form-horizontal"
+      role="form">
+    <div style="width: 1000px;padding-left: 300px">
+        <div class="form-group">
+            <label for="movieName">电影名</label>
+            <input type="text" class="form-control" name="movieName" id="movieName" placeholder="电影名">
+        </div>
+        <div class="form-group">
+            <label for="director">导演</label>
+            <input type="text" class="form-control" name="movieDirector" id="director" placeholder="导演">
+        </div>
+        <div class="form-group">
+            <label for="pic">电影图片</label>
+            <input type="file" id="pic" name="pic">
+        </div>
+        <div class="form-group">
+            <label>类型</label>
+            <input type="checkbox" name="type" value="剧情" checked>剧情
+            <input type="checkbox" name="type" value="动作">动作
+            <input type="checkbox" name="type" value="悬疑">悬疑
+            <input type="checkbox" name="type" value="犯罪">犯罪
+            <input type="checkbox" name="type" value="动画">动画
+            <input type="checkbox" name="type" value="奇幻">奇幻
+            <input type="checkbox" name="type" value="惊悚">惊悚
+        </div>
+        <div class="form-group">
+            <label for="actor">主演</label>
+            <input type="text" class="form-control" name="movieActor" id="actor" placeholder="主演">
+        </div>
+        <div class="form-group">
+            <label>国家/地区</label>
+            <input type="text" class="form-control" name="movieArea" id="area" placeholder="地区">
+        </div>
+        <div class="form-group">
+            <label>语言</label>
+            <input type="text" class="form-control" name="movieLanguage" placeholder="语言">
+        </div>
+        <div class="form-group">
+            <label>上映时间</label>
+            <input type="date" class="form-control" name="movieOntime">
+        </div>
+        <button type="submit" class="btn btn-warning">Submit</button>
+    </div>
+</form>
+
+<script th:src="@{/js/jquery/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="E:/maven/repository/mysql/mysql-connector-java/5.1.39/mysql-connector-java-5.1.39.jar" />
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/et1906"
+                        userId="root"
+                        password="etoak">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.etoak.bean"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="false" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mappers"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="false" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.etoak.mapper"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+
+        <table schema="et1906" tableName="eve_review"
+               domainObjectName="MovieReview" >
+            <property name="useActualColumnNames" value="false"/>
+            <!--主键 <selectKey keyProperty="empno" resultType=""> </selectKey>-->
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+
+
+    </context>
+</generatorConfiguration>

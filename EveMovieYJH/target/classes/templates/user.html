@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页</title>
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- 导航 -->
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">导航</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="navbar-brand">当前登录用户：<span th:text="${session.user.name}"></span></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">操作<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+
+                    <li><a th:href="@{/user/logout}">退出</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- 菜单 -->
+<div class="ibox-content">
+    <div class="row" id="data">
+    </div>
+    <p style="text-align: center">
+        <button type="button" class="btn btn-outline btn-primary" onclick="firstpage()">首页</button>
+        <button type="button" class="btn btn-outline btn-success" onclick="prepage()">上一页</button>
+        <button type="button" class="btn btn-outline btn-info" onclick="nextpage()">下一页</button>
+        <button type="button" class="btn btn-outline btn-warning" onclick="lastpage()">末页</button>
+        &nbsp;&nbsp;&nbsp;
+    </p>
+</div>
+</div>
+
+<div class="modal fade" id="xiangqing" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="title">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <!--<h4 class="modal-title" id="xq_name"></h4>-->
+            </div>
+            <div class="modal-body" id="maindiv">
+
+
+                <div class="form-group">
+                    <label for="xq_nam" class="col-sm-2 control-label" style="margin-top: 7px">电影名:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="xq_nam"
+                               name="xq_name" placeholder="菜品">
+                    </div>
+                </div>
+                <br>
+                <!--作者-->
+                <div class="form-group">
+                    <label for="xq_category" class="col-sm-2 control-label" style="margin-top: 7px">类别:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="xq_category"
+                               name="xq_category" placeholder="作者">
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="xq_info" class="col-sm-2 control-label" style="margin-top: 7px">菜品描述:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="xq_info"
+                               name="xq_info" placeholder="菜品描述">
+                    </div>
+                </div>
+                <br>
+                <!--价格-->
+                <div class="form-group">
+                    <label for="xq_price" class="col-sm-2 control-label" style="margin-top: 7px">价格:</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="xq_price"
+                               name="xq_price">
+                    </div>
+                </div>
+                <br>
+                <!--图片-->
+            </div>
+            <div class="modal-footer">
+                <div class="form-group" id="xq_pic">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/jquery/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script>
+    let pre = "";
+    let next = "";
+    let last = "";
+    let pageNumber = 1;
+    let pageSize = 8;
+
+    $(function () {
+        queryAllMovie();
+    });
+
+    function queryAllMovie() {
+        $.post("/eve/movie/allList", "pageNumber=" + pageNumber + "&pageSize=" + pageSize, function (msg) {
+            last = msg.pageCount;
+            //setcurrent();
+            console.log(last);
+            let pics = "";
+            $.each(msg.rows, function (i, movie) {
+                if (movie.movieOperation == 0) {
+                    return;
+                }
+
+                pics += "<div class=''>" +
+                    "<div class='col-md-3 col-sm-6'>" +
+                    "<div class='thumbnail'>" +
+                    "<a href='/eve/movie/xq?movieId="+ movie.movieId +"'><img src='/eve" + movie.moviePic + "' style='height: 200px;'></a>" +
+                    "<div class='caption'>" +
+                    "<h3 style='text-align: center'>" + movie.movieName + "</h3>" +
+                    "</div> </div> </div> </div>";
+
+                /*pics += "<div>" +
+                 "<div>";
+                 if (movie.moviePic != null) {
+                 pics += "<img src='/eve" + movie.moviePic + "' style='height:250px;width:250px'>";
+                 } else {
+                 pics += "<img src='/files/610ee20ac131431b9fc3e5c1b33869eb.jpg' alt='暂无封面'>"
+                 }
+                 pics += "<div class='caption'>" +
+                 "<h4>"+movie.movieName+"</h4>" +
+                 "</div>" +
+                 "</div>";*/
+            });
+            $("#data").html(pics);
+
+        }, "json");
+    }
+
+    function prepage() {
+        if (pageNumber == 1) {
+            window.location.href = "javascript:void(0)";
+            return;
+        }
+        pageNumber -= 1;
+        queryAllMovie();
+    }
+
+    function firstpage() {
+        if (pageNumber == 1) {
+            window.location.href = "javascript:void(0)";
+            return;
+        }
+        pageNumber = 1;
+        queryAllMovie();
+    }
+
+    function nextpage() {
+        if (pageNumber == last) {
+            window.location.href = "javascript:void(0)";
+            return;
+        }
+        pageNumber += 1;
+        queryAllMovie();
+    }
+
+    function lastpage() {
+        if (pageNumber == last) {
+            window.location.href = "javascript:void(0)";
+            return;
+        }
+        pageNumber = last;
+        queryAllMovie();
+    }
+
+</script>
+</body>
+</html>
