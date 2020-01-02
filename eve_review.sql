@@ -1,0 +1,12 @@
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (1, '我很喜欢这部影片', 'user', 1, '2019-11-01 17:37:23');
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (2, 'rerwerwerwerwerwerew', '雷欧', 1, '2019-11-01 17:37:23');
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (3, 'rerwerwerwerwerwerew', '雷欧', 1, '2019-11-01 17:37:23');
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (4, 'erwerew', 'user', 1, '2019-11-01 17:37:23');
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (5, '张翼', 'user', 1, '2019-11-01 17:37:23');
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (6, '呈现出', 'user', 1, '2019-11-01 17:37:23');
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (7, '哈哈哈哈哈哈', 'user', 9, '2019-11-01 17:37:23');
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (8, '非法违法', 'user', 9, '2019-11-01 17:37:23');
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (9, '撒娇第卅基地啊世界第九', 'user', 9, '2019-11-01 17:37:23');
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (10, '啊啊啊啊啊啊', 'aaa', 9, NULL);
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (11, '的方式', 'aaa', 9, NULL);
+INSERT INTO `eve_review`(`id`, `content`, `username`, `movie_id`, `review_create`) VALUES (12, 'ssdds', 'aaa', 9, '2019-11-01 18:01:57');
